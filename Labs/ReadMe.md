@@ -21,7 +21,7 @@ Please refer to each worksheet for instructions and exercises for the correspond
 
 [Lab](Week03Lab.md)
 
-[Lab](Week03LabSolution.md)
+[Solution](Week03LabSolution.md)
 
 
 
