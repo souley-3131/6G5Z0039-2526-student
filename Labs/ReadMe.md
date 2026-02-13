@@ -7,6 +7,7 @@ Links to all lab worksheets and resources:
 Please refer to each worksheet for instructions and exercises for the corresponding week.
 
 ## Week 01
+
 [Lab](Week01Lab.md)
 
 [Solution](Week01LabSolution.md)
@@ -23,5 +24,8 @@ Please refer to each worksheet for instructions and exercises for the correspond
 
 [Solution](Week03LabSolution.md)
 
+## Week 04
+
+[Lab](Week04Lab.md)
 
 
