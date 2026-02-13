@@ -5,8 +5,8 @@ class Product {
     private final MinimumPrice minimumPrice;
     private SellingPrice sellingPrice;
 
-    public Product(FullPrice price, MinimumPrice minimumPrice) {
-        this.sellingPrice = price;
+    public Product(FullPrice fullPrice, MinimumPrice minimumPrice) {
+        this.sellingPrice = fullPrice;
         this.minimumPrice = minimumPrice;
     }
 
