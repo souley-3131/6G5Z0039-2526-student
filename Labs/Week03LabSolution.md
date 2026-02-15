@@ -6,11 +6,11 @@ Suggested answers to the Week 3 Lab Exercises
 
 We asked you to evaluate the design of the Polymorphic Selling Price product.
 
-The key design element is representing the concept of a SellingPrice as an interface. The interface is implemented by two different Value Objects, one representing a Full Price and one representing a Discounted Price. The Product holds a reference of abstract `SellingPrice`, which is either a Full Price or a Discounted Price depending on if we had applied or removed a discount. Note how all the calculation and validation logic exists in the relevant ValueObject classes. 
+The key design element is representing the concept of a SellingPrice as an interface. The interface is implemented by two different Value Objects, one representing a Full Price and one representing a Discounted Price. The Product holds a reference of abstract `SellingPrice`, which is either a Full Price or a Discounted Price depending on if we had applied or removed a discount. Note how all the calculation and validation logic exists in the relevant ValueObject classes.
 
 **Q)** We asked is wrong with the design of the Product class?, specifically the getPrice() method?
 
-**A)** The getPrice method has reverted back to returning a primitive `double`. It would be better if the getPrice returned another ValueObject. For example, we could create another ValueObject class called 'ProductPrice'. 
+**A)** The getPrice method has reverted back to returning a primitive `double`. It would be better if the getPrice returned another ValueObject. For example, we could create another ValueObject class called 'ProductPrice'.
 
 ```Java
 class ProductPrice
@@ -413,7 +413,7 @@ class Player {
 }
 ```
 
-The PlayerSelector interface (this is the interface to our variable strategy). 
+The PlayerSelector interface (this is the interface to our variable strategy).
 
 ```java
 interface PlayerSelector {
@@ -474,7 +474,7 @@ or even a Random version
 ```Java
 public class RandomSelector implements PlayerSelector {
     private final List<Player> players ;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public RandomSelector(Player... players) {
         this.players = Arrays.asList(players);
@@ -496,6 +496,8 @@ public class RandomSelector implements PlayerSelector {
 All these different strategy implementation can be used by the same client code
 
 ```Java
+
+
 void play(PlayerSelector selector) {
     for(int i = 0; i < selector.size(); i++){
         Player player = selector.next();
@@ -503,6 +505,6 @@ void play(PlayerSelector selector) {
     }
 }
 ```
-The family of algorithms here is the way we decide which player has the next turn. We can create many different algorithms to select the next player, and hide them behind the PlayerSelector interface. We can then decide on the method of choosing next player at runtime.
+The family of algorithms here is the way we decide which player has the next turn. We can create many different algorithms to select the next player, and hide them behind the PlayerSelector interface. We can then decide on the method of choosing next player at runtime by selecting different concrete implementations of the PlayerSelector interface.
 
 
