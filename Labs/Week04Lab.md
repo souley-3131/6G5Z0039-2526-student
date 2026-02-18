@@ -303,11 +303,11 @@ $1.00
 
 **Question**: What are the differences between the Abstract Factory and Factory Method patterns. When would you use one over the other?
 
-# Identify Candidate Classes for the Simple Frustration Game.
+# Identify Candidate Classes for the Assessment Task Game.
 
-If you have time continue to think about the Simple Frustration game.
+If you have time continue to think about the assessment task game.
 
-The assessment task is to write a simulation of a prototype physical board game called “Simple Frustration”. Full details are in the assessment brief in Moodle and there is a demo in Lecture 1 that shows an example simulation.
+The assessment task is to write a simulation of a prototype physical board game. Full details are in the assessment brief in Moodle and there is a demo in Lecture 1 that shows an example simulation.
 
 This lab exercise provides some time to identify some possible classes that model the key concepts and relationships within the game
 
