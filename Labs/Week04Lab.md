@@ -307,6 +307,49 @@ $1.00
 
 **Question**: What are the differences between the Abstract Factory and Factory Method patterns. When would you use one over the other?
 
+
+# Using the Abstract Factory Pattern to create different Iterators (Advanced)
+
+We previously introduced the Java Iterable and Iterator Interfaces as a standard way of providing an iterator for a collection. The Iterable interface has a single method `iterator()` that returns an Iterator, and the Iterator interface has methods `hasNext()` and `next()` to access the elements of the collection sequentially without exposing its underlying representation.
+
+If we want to provide different iterators for the same collection, we can use the Abstract Factory pattern to create different iterators. We need to use a Factory because the definition of the Iterable<T> interface is that it creates and returns an new instance of Iterator<T> when the `iterator()` method is called, so we need to use a Factory to create the different iterators.
+
+Now the concrete implementation of the Factory is the thing that provides the different iterators, and the client code just uses the Iterable interface to get an iterator, without needing to know which concrete implementation of the Factory is being used.
+
+For example, in the Game we might want to provide different iterators over a collection of Players. In this case the iterator is selecting the next player to take their turn, so we might want to have a different iterator for different game modes. For example, in a "normal" game mode we might want to iterate over the players in the order they were added to the game, but in a "random" game mode we might want to iterate over the players in a random order. In our implementation of iterators the sequence never stops, the next() method keeps providing players in order.
+
+Start with a simple `Player` class.
+
+```java
+class Player {
+    private final String color;
+    private final String name;
+
+    Player(String name, String color) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(color);
+        this.name = name;
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+```
+
+Create a single class called `PlayerIterable` class that implements `Iterable<Player>`.
+
+It has a single method that returns an abstract interface, `Iterator<Player>`. You will need to create a new iterator every time the `iterator()` method is called because the state of the iterator (the current position in the collection) is maintained in each iterator instance, so we can't reuse the same iterator instance for multiple iterations. 
+
+You will therefore need use the Abstract Factory to supply a factory that creates different concrete implementations of an iterator that iterates accross an array of Players.  
+
+We suggest that you implement different iterators and factories for **forward** (players take turns in the order they were added to the game), **reverse** (players take turns in the reverse order they were added to the game) and **random** (players take turns in a random order) play.
+
 # Identify Candidate Classes for the Assessment Task Game.
 
 If you have time continue to think about the assessment task game.
