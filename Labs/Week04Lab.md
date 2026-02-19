@@ -58,6 +58,9 @@ class Currency {
         this.decimals = decimals;
     }
 
+    public String getCode() { 
+      return code;  
+    }
     public String getName() {
         return name;
     }
@@ -139,7 +142,8 @@ class Money {
 
     @Override
     public String toString() {
-        //create a format string such as ".2f" to display a double to a number of decimals
+      // the number of decimals varies by currency
+      // create a format string such as ".2f" to display a double to a number of decimals
         String formatString = String.format(".%df", currency.getDecimals());
         return currency.getSymbol() + String.format("%" + formatString , amount);
     }
