@@ -104,7 +104,7 @@ class TotalPrice
         this.productPrice = productPrice;
         this.shippingCost = shippingCost;
         //because product price and shipping cost are immutable, we can safely sum them once
-        this.totalPrice = productPrice.get() + shippingCost.get();
+        totalPrice = productPrice.get() + shippingCost.get();
     }
 
     @Override

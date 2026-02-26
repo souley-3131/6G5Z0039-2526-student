@@ -358,9 +358,9 @@ interface ShippingCostStrategy {
 Once you have this working, convert your solution to use the ShippingCost Value Object you produced in the first exercise (replacing the double primitive type with a Value Object).
 
 
-# Identify Candidate Classes for the Simple Frustration Game.
+# Identify Candidate Classes for the Assessment Game.
 
-The assessment task is to write a simulation of a prototype physical board game called “Simple Frustration”. Full details are in the assessment brief in Moodle and there is a demo in Lecture 1 that shows an example simulation.
+The assessment task is to write a simulation of a prototype physical board game. Full details are in the assessment brief in Moodle and there is a demo in Lecture 1 that shows an example simulation.
 
 This lab exercise provides some time to identify some possible classes that model the key concepts and relationships within the game
 
