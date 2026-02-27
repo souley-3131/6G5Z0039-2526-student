@@ -385,7 +385,7 @@ In a real Ecommerce system, we will still need some method of asking the user wh
 
 The Strategy pattern is one of the most useful design patterns, it simplifies code by taking algorithmic code out of a class and putting into its own class encapsulated behind and abstract interface. Getting the client code to make calls to the abstract interface means that we can choose the concrete implementation at runtime and put the code which chooses the concrete implementation somewhere else.
 
-# Using Strategy Pattern to Determine which player has a turn in a board game
+# Using a Strategy Pattern to select which player has a turn in a board game
 
 If we are playing board game with more than one player, we need to determine which player has the next turn. Here are some examples of strategy that returns the next player.
 
@@ -426,21 +426,23 @@ We can implement a standard round-robin selector using the order that players we
 
 ```java
 class ForwardSelector implements PlayerSelector {
-    private final List<Player> players;
+    private final Player[] players;
     private int index = 0;
 
-    public ForwardSelector(Player... players) {
-        this.players = Arrays.asList(players);
+    public ForwardSelector(Player[] players) {
+
+        this.players = Arrays.copyOf(players, players.length);
     }
 
     @Override
     public int size() {
-        return players.size();
+        return players.length;
     }
 
     @Override
     public Player next() {
-        return players.get(index++ % players.size());
+        index = index % players.length; //reset index back to 0 before use if it goes above the length of the array using the % operator
+        return players[index++];
     }
 }
 ```
@@ -448,33 +450,36 @@ class ForwardSelector implements PlayerSelector {
 We can then implement a reverse order version
 
 ```java
-public class ReverseSelector implements PlayerSelector {
-    private final List<Player> players ;
-    private int index = 0;
+class ReverseSelector implements PlayerSelector {
+    private final Player[] players ;
+    private int index;
+    private final int lastIndex;
 
-    public ReverseSelector(Player... players) {
-        this.players = Arrays.asList(players);
-        Collections.reverse(this.players);// Reverse changes the order in the list
+    public ReverseSelector(Player[] players) {
+        this.players = Arrays.copyOf(players, players.length);
+        index = lastIndex =  this.players.length - 1;
+
     }
 
     @Override
-    public int size() {
-        return players.size();
-    }
+    public int size() { return players.length; }
 
     @Override
     public Player next() {
-        return players.get(index++ % players.size());
+        //reset index back to the end of the array if it goes below 0 before use;
+        index = (index >= 0) ? index : lastIndex;
+        return players[index--];
     }
 }
+
 ```
 
 or even a Random version
 
 ```Java
-public class RandomSelector implements PlayerSelector {
+class RandomSelector implements PlayerSelector {
     private final List<Player> players ;
-    private final Random random = new Random();
+    private Random random = new Random();
 
     public RandomSelector(Player... players) {
         this.players = Arrays.asList(players);
@@ -506,5 +511,4 @@ void play(PlayerSelector selector) {
 }
 ```
 The family of algorithms here is the way we decide which player has the next turn. We can create many different algorithms to select the next player, and hide them behind the PlayerSelector interface. We can then decide on the method of choosing next player at runtime by selecting different concrete implementations of the PlayerSelector interface.
-
 

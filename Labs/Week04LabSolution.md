@@ -481,9 +481,10 @@ class PlayerIterable implements Iterable<Player> {
     private final Player[] players;
     private final PlayerIteratorFactory factory;
 
-    public PlayerIterable(PlayerIteratorFactory factory, Player... players) {
+    public PlayerIterable(PlayerIteratorFactory factory, Player[] players) {
+        //make a copy of the players array in case the original array is after we create the PlayerIterable instance.
+        this.players = Arrays.copyOf(players, players.length);;
         this.factory = factory;
-        this.players = players;
     }
 
     @Override
@@ -491,111 +492,88 @@ class PlayerIterable implements Iterable<Player> {
         return factory.create(players);
     }
 }
+
 ```
 
 We can now create our Factories and their corresponding iterators. We are going to make factories for **forward** (players take turns in the order they were added to the game), **reverse** (players take turns in the reverse order they were added to the game) and **random** (players take turns in a random order) play.
 
 All three iterators are implemented as private inner classes, but they could be implemented as separate package private or public classes if desired. All the concrete implementations all share some elements of common code, and these common code elements have been generalized into abstract super classes.
 
-
+The ForwardSelector increments the index by 1 each time the next() method is called, and uses the % operator to reset the index back to 0 when it goes above the length of the players array.
 ```java
-//All selector implementations share the same code for storing the players and counting them, so we put that in an abstract class.
-abstract class AbstractSelector {
-    protected final Player[] players;
+class ForwardIteratorFactory implements PlayerIteratorFactory {
+    // The implementation of Iterator<Player> is a private nested class so the only way to create an instance of it is through the create method of the PlayerIteratorFactory interface.
+    private static class ForwardIterator implements Iterator<Player> {
+        private final Player[] players;
+        private int index = 0;
 
-    protected AbstractSelector(Player[] players) {
-        this.players = Arrays.copyOf(players, players.length);
-    }
+        public ForwardIterator(Player[] players) {
+            this.players = players;
+        }
 
-    int count() {
-        return players.length;
-    }
-}
-```
-The forward and reverse iterators are similar in that they use a simple index to keep track of the current position in the collection, so we can put that common code in an abstract class.
+        @Override
+        public boolean hasNext() {
+            return true; //always returns true as it is a cyclic iterator
+        }
 
-```java
-// An abstract selector that uses an index to select players in a cyclic manner using the % modulo operator.
-abstract class IndexedSelector extends AbstractSelector implements Iterator<Player> {
-
-    private int index = 0;
-
-    public IndexedSelector(Player... players) {
-        super(players);
-    }
-
-    @Override
-    public boolean hasNext() {
-        return true;
-    }
-
-    @Override
-    public Player next() {
-        return players[index++ % count()];
-    }
-}
-```
-
-The ForwardSelector is a simple extension of the IndexedSelector, and is created as a private inner class in the factory method. The 'static' modifier means that the ForwardSelector class does not have access to the instance variables of the ForwardSelectorFactory class, but it can still be instantiated and used by the factory method.
-
-```java
-class ForwardSelectorFactory implements PlayerIteratorFactory {
-
-    // A private static class that extends IndexedSelector.
-    // As it is private the only way to create an instance of it is through the create method of the PlayerIteratorFactory interface.
-    // ForwardSelector simply iterates through the players in the order they were provided.
-    private static class ForwardSelector extends IndexedSelector {
-        public ForwardSelector(Player... players) {
-            super(players);
+        @Override
+        public Player next() {
+            index = index % players.length; //reset index back to 0 before use if it goes above the length of the array using the % operator
+            return players[index++];
         }
     }
 
     @Override
     public Iterator<Player> create(Player... players) {
-        return new ForwardSelector(players);
+        return new ForwardIterator(players);
     }
 }
 ```
-
-The ReverseSelector is a slightly more complex extension of the IndexedSelector, and is again created as a private inner class in the factory method.
+The ReverseIterator decrements the index by 1 each time the next() method is called, resetting the index back to the end of the array when it goes below 0 before use.
 
 ```java
-class ReverseSelectorFactory implements PlayerIteratorFactory {
-    // A private static class that extends IndexedSelector.
-    // As it is private the only way to create an instance of it is through the create method of the PlayerIteratorFactory interface.
-    // ReverseSelector simply iterates through the players in the reverse of the order they were provided.
-    // We only want to perform the reversal once, so we do it in the constructor.
-    private static class ReverseSelector extends IndexedSelector {
+class ReverseIteratorFactory implements PlayerIteratorFactory {
+    // The implementation of Iterator<Player> is a private nested class so the only way to create an instance of it is through the create method of the PlayerIteratorFactory interface.
+    private static class ReverseIterator implements Iterator<Player> {
+        private final Player[] players;
+        private int index;
+        private final int lastIndex;
+        public ReverseIterator(Player[] players) {
+            this.players = players;
+            index = lastIndex =  this.players.length - 1;
+        }
 
-        public ReverseSelector(Player... players) {
-            for (int i = 0, j = players.length - 1; i < j; i++, j--) {
-                Player swap = players[i];
-                players[i] = players[j];
-                players[j] = swap;
-            }
-            super(players);
+        @Override
+        public boolean hasNext() {
+            return true; //always returns true as it is a cyclic iterator
+        }
+
+        @Override
+        public Player next() {
+            //reset index back to the end of the array if it goes below 0 before use;
+            index = (index >= 0) ? index : lastIndex;
+            return players[index--];
         }
     }
 
     @Override
     public Iterator<Player> create(Player... players) {
-        return new ReverseSelector(players);
+        return new ReverseIterator(players);
     }
 }
 ```
-
-The RandomSelector is also created as a private inner class in the factory method.
+The RandomIterator uses the Java Random class to select a random index between 0 inclusive and the length of the players array exclusive, and returns the player at that index.
 
 ```java
-class RandomSelectorFactory implements PlayerIteratorFactory {
-    // A private static class that extends AbstractSelector and implements Iterator<Player>
-    // As it is private the only way to create an instance of it is through the create method of the PlayerIteratorFactory interface.
-    // Randomly selects a random player using the Java Random class to select a number between 0 inclusive and count() exclusive.
-    private static class RandomSelector extends AbstractSelector implements Iterator<Player> {
+class RandomIteratorFactory implements PlayerIteratorFactory {
+    // The implementation of Iterator<Player> is a private nested class so the only way to create an instance of it is through the create method of the PlayerIteratorFactory interface.
+    // Randomly selects a random player using the Java Random class to select a number between 0 inclusive and players.length exclusive.
+    private static class RandomIterator implements Iterator<Player> {
+        private final Player[] players;
         private final Random random = new Random();
 
-        public RandomSelector(Player... players) {
-            super(players);
+        public RandomIterator(Player[] players) {
+            this.players = players;
         }
 
         @Override
@@ -605,18 +583,18 @@ class RandomSelectorFactory implements PlayerIteratorFactory {
 
         @Override
         public Player next() {
-            return players[random.nextInt(0, count())];
+            return players[random.nextInt(0, players.length)];
         }
     }
 
 
     @Override
     public Iterator<Player> create(Player... players) {
-        return new RandomSelector(players);
+        return new RandomIterator(players);
     }
 }
-```
 
+```
 The `Game` class uses the standard Java `Iterable<Player>` class to get an iterator over the players, the Java language enhanced for loop (the `for-each` loop) is used to iterate over the players.
 
 ```java
@@ -636,7 +614,6 @@ class Game {
             System.out.format("%s%s%s%n", player.getColor(), player.getName(), DEFAULT_COLOR);
             //simulate the end of a game
             if (--turns == 0) {
-                ;
                 break;
             }
         }
@@ -661,20 +638,20 @@ public class Example {
         };
 
         System.out.format("Forward%n");
-        PlayerIteratorFactory factory = new ForwardSelectorFactory();
+        PlayerIteratorFactory factory = new ForwardIteratorFactory();
         play(factory, players);
 
         System.out.format("Reverse%n");
-        factory = new ReverseSelectorFactory();
+        factory = new ReverseIteratorFactory();
         play(factory, players);
 
         System.out.format("Random%n");
-        factory = new RandomSelectorFactory();
+        factory = new RandomIteratorFactory();
         play(factory, players);
 
     }
 
-    private static void play(PlayerIteratorFactory factory , Player... players) {
+    private static void play(PlayerIteratorFactory factory , Player[] players) {
         Iterable<Player> iterable =  new PlayerIterable(factory, players);
         Game game = new Game(iterable);
         game.play();
@@ -692,8 +669,8 @@ In this design.
 
 This is one of the main uses of the Abstract Factory (or Factory Method pattern). Where we used something like a Strategy to provide a variation in an algorithm, the Strategy had to be created first and then used repeatedly. If we need to create a new instance of something that varies, then the concrete implementation of the Factory controls which concrete type is created, and the client code just uses the Factory interface to create new instances as required.
 
-The variation  is represented by the factory - different concrete factories produce different concrete implementations of an abstract type. 
+The variation  is represented by the factory - different concrete factories produce different concrete implementations of an abstract type.
 
-
+> The  "\u001B[31m" strings are Console ANSI escape codes to change the colour of the text in the console. The DEFAULT string is used to reset the colour back to the default after printing a player's name.
 
 

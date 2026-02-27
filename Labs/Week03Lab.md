@@ -358,6 +358,42 @@ interface ShippingCostStrategy {
 Once you have this working, convert your solution to use the ShippingCost Value Object you produced in the first exercise (replacing the double primitive type with a Value Object).
 
 
+# Using a Strategy Pattern to select which player has a turn in a board game (Advanced)
+
+If we are playing board game with more than one player, we need to determine which player has the next turn. Here are some examples of strategy that returns the next player.
+
+First we define a Player
+
+```Java
+class Player {
+    private final String color;
+    private final String name;
+
+    Player(String name, String color) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(color);
+        this.name = name;
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+```
+Design an interface called PlayerSelector that has a method that returns the next player to have a turn. Then implement the following strategies.
+
+- Forward in a round robin fashion (Player 1, Player 2, Player 1, Player 2, etc)
+- Backward in a round robin fashion (Player 2, Player 1, Player 2, Player 1, etc)
+- Random
+
+Write a client class that uses your different PlayerSelector strategies to determine which player has the next turn in a game.
+
+
 # Identify Candidate Classes for the Assessment Game.
 
 The assessment task is to write a simulation of a prototype physical board game. Full details are in the assessment brief in Moodle and there is a demo in Lecture 1 that shows an example simulation.
