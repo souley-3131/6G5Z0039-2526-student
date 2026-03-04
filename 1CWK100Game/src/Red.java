@@ -24,7 +24,7 @@ class Red {
         if (isHome())
             return String.format("HOME (Position %d)", getPosition());
         if (isAtEnd())
-            return String.format("END (Tail Position %d)", getPosition());
+            return String.format("END (Position %d)", getPosition());
         else
             return String.format("Position %d", getPosition());
 
