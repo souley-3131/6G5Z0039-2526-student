@@ -73,7 +73,6 @@ class GameBoard {
         return index + 1;
     }
 
-    @Override
     public void advance(int count) {
         int newIndex = index + count;
         setIndex(newIndex % LENGTH);
