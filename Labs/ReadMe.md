@@ -34,4 +34,15 @@ Please refer to each worksheet for instructions and exercises for the correspond
 
 [Lab](Week05Lab.md)
 
+[Solution](Week05LabSolution.md)
 
+
+## Week 06
+
+[Lab](Week06Lab.md)
+
+[Solution](Week06LabSolution.md)
+
+## Week 07
+
+[Lab](Week07Lab.md)
