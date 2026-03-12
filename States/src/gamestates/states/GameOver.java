@@ -15,4 +15,9 @@ public class GameOver implements GameState {
   public void turn() {
     System.out.println("GameOver");
   }
+
+  @Override
+  public boolean isGameOver() {
+    return true;
+  }
 }

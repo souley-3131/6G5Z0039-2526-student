@@ -16,9 +16,10 @@ class Game implements Context {
   }
 
   public void play() {
-    while (gameState.getClass() != GameOver.class) {
+    while (!gameState.isGameOver()) {
       gameState.turn();
     }
+    //show what happens if we play a turn when game over
     gameState.turn();
   }
 

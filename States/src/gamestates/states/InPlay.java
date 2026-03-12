@@ -15,10 +15,20 @@ class InPlay implements GameState {
 
   @Override
   public void turn() {
-    System.out.format("turn %d%n", ++turns);
+    playTurn();
     if(turns == 3)
     {
       context.setGameState(new GameOver(context));
     }
+  }
+
+  private void playTurn() {
+    ++turns;
+    System.out.format("turn %d%n", turns);
+  }
+
+  @Override
+  public boolean isGameOver() {
+    return false;
   }
 }

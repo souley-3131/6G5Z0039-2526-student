@@ -98,11 +98,11 @@ Create an AuthenticationContext class with the following API
 ```java
 class AuthenticationContext implements Context{
 
-    public void login()
-    public void logout()
+    public void login();
+    public void logout();
     @Override
-    public void setState(State state)
-    public String getStatus()
+    public void setState(State state);
+    public String getStatus();
 }
 ```
 The getStatus() method should return a string indicating if the current state is LoggedIn or LoggedOut.
@@ -241,12 +241,12 @@ Some websites (banking applications for example) automatically log the user out 
 ```java
 class AuthenticationContext implements Context {
 
-    public void login()
-    public void logout()
-    public void tick()
+    public void login();
+    public void logout();
+    public void tick();
      @Override
-    public void setState(State state)
-    public String getStatus()
+    public void setState(State state);
+    public String getStatus();
 }
 ```
 

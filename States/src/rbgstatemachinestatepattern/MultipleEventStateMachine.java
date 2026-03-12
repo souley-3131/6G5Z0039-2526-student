@@ -4,7 +4,7 @@ class   MultipleEventStateMachine implements Context {
     private State currentState;
 
     MultipleEventStateMachine() {
-        currentState = new Red(); //initial state
+        currentState = new Red(this); //initial state
     }
 
     @Override
@@ -13,10 +13,10 @@ class   MultipleEventStateMachine implements Context {
     }
 
     public void forward() {
-        currentState.forward(this);
+        currentState.forward();
     }
 
     public void reverse() {
-        currentState.reverse(this);
+        currentState.reverse();
     }
 }
