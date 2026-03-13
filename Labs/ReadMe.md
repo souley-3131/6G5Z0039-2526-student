@@ -46,3 +46,12 @@ Please refer to each worksheet for instructions and exercises for the correspond
 ## Week 07
 
 [Lab](Week07Lab.md)
+
+[Solution](Week07LabSolution.md)
+
+
+## Week 08
+
+[Lab](Week08Lab.md)
+
+
