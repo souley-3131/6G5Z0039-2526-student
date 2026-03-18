@@ -6,7 +6,7 @@ class Order {
     private final int orderItems;
     private final EmailService emailService;
     private final PaymentService paymentService;
-    private State currentState = new Received();
+    private State status = new Received();
 
     Order(String orderNumber, int orderItems, EmailService emailService, PaymentService paymentService) {
         this.orderNumber = orderNumber;
@@ -16,35 +16,35 @@ class Order {
     }
 
     void paymentConfirmed() {
-        currentState.paymentConfirmed();
+        status.paymentConfirmed();
     }
 
     void customerCancelled() {
-        currentState.customerCancelled();
+        status.customerCancelled();
     }
 
     void warehouseCancelled() {
-        currentState.warehouseCancelled();
+        status.warehouseCancelled();
     }
 
     void itemPicked() {
-        currentState.itemPicked();
+        status.itemPicked();
     }
 
     void orderPacked() {
-        currentState.orderPacked();
+        status.orderPacked();
     }
 
     void courierPickup() {
-        currentState.courierPickup();
+        status.courierPickup();
     }
 
     void customerReturn() {
-        currentState.customerReturn();
+        status.customerReturn();
     }
 
-    public String getCurrentState() {
-        return String.format("%s %s", orderNumber, currentState);
+    public String getStatus() {
+        return String.format("%s %s", orderNumber, status);
     }
 
     private interface State {
@@ -131,14 +131,14 @@ class Order {
         @Override
         public void paymentConfirmed() {
             emailService.sendOrderConfirmation(orderNumber);
-            currentState = new Paid();
+            status = new Paid();
         }
 
         @Override
         public void customerCancelled() {
             paymentService.refundCustomer(orderNumber);
             emailService.sendCustomerCancellationConfirmationEmail(orderNumber);
-            currentState = new Cancelled();
+            status = new Cancelled();
         }
 
     }
@@ -155,7 +155,7 @@ class Order {
         @Override
         public void itemPicked() {
             if (--itemsToPick == 0) {
-                currentState = new Picked();
+                status = new Picked();
             }
         }
 
@@ -164,7 +164,7 @@ class Order {
             itemsToPick = orderItems;
             paymentService.refundCustomer(orderNumber);
             emailService.sendCustomerCancellationConfirmationEmail(orderNumber);
-            currentState = new Cancelled();
+            status = new Cancelled();
         }
 
         @Override
@@ -172,7 +172,7 @@ class Order {
             itemsToPick = orderItems;
             paymentService.refundCustomer(orderNumber);
             emailService.sendWarehouseCancellationApologyEmail(orderNumber);
-            currentState = new Cancelled();
+            status = new Cancelled();
         }
     }
 
@@ -186,14 +186,14 @@ class Order {
         @Override
         public void orderPacked() {
             emailService.notifyCourier(orderNumber);
-            currentState = new Packed();
+            status = new Packed();
         }
 
         @Override
         public void warehouseCancelled() {
             paymentService.refundCustomer(orderNumber);
             emailService.sendWarehouseCancellationApologyEmail(orderNumber);
-            currentState = new Cancelled();
+            status = new Cancelled();
         }
     }
 
@@ -207,7 +207,7 @@ class Order {
         @Override
         public void courierPickup() {
             emailService.sendDispatchConfirmationEmail(orderNumber);
-            currentState = new Dispatched();
+            status = new Dispatched();
         }
 
     }
@@ -223,7 +223,7 @@ class Order {
         public void customerReturn() {
             paymentService.refundCustomer(orderNumber);
             emailService.sendReturnConfirmationEmail(orderNumber);
-            currentState = new Returned();
+            status = new Returned();
         }
     }
 }
