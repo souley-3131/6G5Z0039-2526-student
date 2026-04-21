@@ -74,21 +74,23 @@ class Play implements org.springframework.boot.CommandLineRunner, Ordered {
 
 # 1CWK100 Game – My Implementation
 
-## 1. Variations and Advanced Features Implemented
-- Basic Game: 5x5 board with Red starting from 1 going to 25 and Blue starting at 25 going to 1.
+1. Variations 
+- Basic Game: 5x5 board with Red starting from 1 going to 25 and Blue starting at 25 going to 1; for the terminal to be
+able to reinact this game.java consists of "newPosition= oldPosition + totalRoll" for Red player and 
+"newPosition = oldPosition - totalRoll" for blue player.
+Consists of 2 dice to determine how many moves a player takes. The movement for a player is determined in Game.java
+"redPos += roll;" and "bluePos -= roll;" is how both players are starting and finishing from opposite places 
+in simpler terms its saying red player uses + and blue player uses -. 
+
+
+
+
 -Wormholes
 - Hit rule
 - Overshoot rule
 - Replay system
 - Turn-based game loop
 
-## 2. Design Patterns Used
-### Rule Engine Pattern
-Explain how rules are applied in order.
-
-### Strategy Pattern (Rules)
-I implemented movement as its own seperate Move class allowing me to update my movement logic
-in any way later on for example prevemtimg the overshoot.
 
 ### Dependency Injection (Spring Boot)
 Explain how AppConfig wires dependencies.
@@ -97,11 +99,6 @@ Explain how AppConfig wires dependencies.
 ### Single Responsibility Principle
 Move class' job is to calculate the the Dice's rolls and update the player positions.
 
-### Open/Closed Principle
-Rules can be added without modifying existing ones.
-
-### Dependency Inversion Principle
-Use cases depend on interfaces, not concrete classes.
 
 ## 4. Clean Architecture / Ports & Adapters
 Explain:
@@ -112,7 +109,12 @@ Explain:
 
 ## 5. Implementation Summary
 Explain where you inserted:
-- MoveRule logic
+-Dice: Two dice labelled as d1 and d2 are ransomised giving the illusion of rolling using Javas Random class.
+The player that rolled, the output of the dice and total sum are presented clearly in a format where the player cant get condused.
+This behaviour is implemented in the rollDice() method in Game.java.
+
+-Board: The board is represented by the board class
+
 - WormholeRule logic
 - HitRule logic
 - EndRule logic

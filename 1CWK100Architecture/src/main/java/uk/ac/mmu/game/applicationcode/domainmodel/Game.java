@@ -21,7 +21,7 @@ public class Game {
 
             if (redTurn) {
                 System.out.println("\nRed's turn");
-                int roll = rollDice();
+                int roll = rollDice("Red");
                 System.out.println("Red rolled " + roll);
                 redPos += roll;
                 System.out.println("Red moved to " + redPos);
@@ -33,7 +33,7 @@ public class Game {
 
             } else {
                 System.out.println("\nBlue's turn");
-                int roll = rollDice();
+                int roll = rollDice("Blue");
                 System.out.println("Blue rolled " + roll);
                 bluePos -= roll;
                 System.out.println("Blue moved to " + bluePos);
@@ -47,11 +47,16 @@ public class Game {
         }
     }
 
-    private int rollDice() {
+    private int rollDice(String playerName) {
         int d1 = random.nextInt(6) + 1;
         int d2 = random.nextInt(6) + 1;
-        return d1 + d2;
+        int total = d1 + d2;
+
+        System.out.println(playerName + " rolled: " + d1 + " and " + d2 + " (total = " + total + ")");
+
+        return total;
     }
+
 }
 
 
