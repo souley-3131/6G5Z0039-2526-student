@@ -2,6 +2,7 @@ package uk.ac.mmu.game;
 
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
+import uk.ac.mmu.game.applicationcode.domainmodel.Game;
 import uk.ac.mmu.game.applicationcode.usecase.play.Provided;
 
 @Component
@@ -13,10 +14,10 @@ class Play implements org.springframework.boot.CommandLineRunner, Ordered {
         this.usecase = usecase;
     }
 
-
     @Override
     public void run(String... args)  {
-        System.out.format("Played Game Id = %d%n", usecase.play());
+        Game game = new Game();
+        game.play();
     }
 
     @Override

@@ -72,6 +72,55 @@ class Play implements org.springframework.boot.CommandLineRunner, Ordered {
     }
 }
 
-```
+# 1CWK100 Game – My Implementation
+
+## 1. Variations and Advanced Features Implemented
+- Basic Game: 5x5 board with Red starting from 1 going to 25 and Blue starting at 25 going to 1.
+-Wormholes
+- Hit rule
+- Overshoot rule
+- Replay system
+- Turn-based game loop
+
+## 2. Design Patterns Used
+### Rule Engine Pattern
+Explain how rules are applied in order.
+
+### Strategy Pattern (Rules)
+I implemented movement as its own seperate Move class allowing me to update my movement logic
+in any way later on for example prevemtimg the overshoot.
+
+### Dependency Injection (Spring Boot)
+Explain how AppConfig wires dependencies.
+
+## 3. SOLID Principles Followed
+### Single Responsibility Principle
+Move class' job is to calculate the the Dice's rolls and update the player positions.
+
+### Open/Closed Principle
+Rules can be added without modifying existing ones.
+
+### Dependency Inversion Principle
+Use cases depend on interfaces, not concrete classes.
+
+## 4. Clean Architecture / Ports & Adapters
+Explain:
+- Domain model is independent
+- Use cases depend on domain
+- Infrastructure depends on use cases
+- No circular dependencies
+
+## 5. Implementation Summary
+Explain where you inserted:
+- MoveRule logic
+- WormholeRule logic
+- HitRule logic
+- EndRule logic
+- RuleEngine logic
+- Game turn loop
+
+## 6. How to Run the Game
+Run the `Play` class.
+
 
 
