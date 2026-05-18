@@ -50,27 +50,6 @@ Classes annotated with `@Component` and that implementing `org.springframework.b
 As we have more than one class implementing CommandLineRunner we also need to implement the Ordered interface to control the order in which they are run.
 
 ```Java
-import uk.ac.mmu.game.applicationcode.usecase.play.Provided;
-@Component
-class Play implements org.springframework.boot.CommandLineRunner, Ordered {
-
-    private final Provided usecase;
-
-    Play(Provided usecase) {
-        this.usecase = usecase;
-    }
-
-
-    @Override
-    public void run(String... args)  {
-        System.out.format("Played Game Id = %d%n", usecase.play());
-    }
-
-    @Override
-    public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
-    }
-}
 
 # 1CWK100 Game – My Implementation
 
@@ -82,6 +61,9 @@ Consists of 2 dice to determine how many moves a player takes. The movement for 
 "redPos += roll;" and "bluePos -= roll;" is how both players are starting and finishing from opposite places 
 in simpler terms its saying red player uses + and blue player uses -. 
 
+-Single Dice: Same size board, same rules applying as basic game just using 1 singular die instead of the sum of 2 dice.
+
+- Exact end:
 
 
 
@@ -95,10 +77,6 @@ in simpler terms its saying red player uses + and blue player uses -.
 ### Dependency Injection (Spring Boot)
 Explain how AppConfig wires dependencies.
 
-## 3. SOLID Principles Followed
-### Single Responsibility Principle
-Move class' job is to calculate the the Dice's rolls and update the player positions.
-
 
 ## 4. Clean Architecture / Ports & Adapters
 Explain:
@@ -109,11 +87,23 @@ Explain:
 
 ## 5. Implementation Summary
 Explain where you inserted:
--Dice: Two dice labelled as d1 and d2 are ransomised giving the illusion of rolling using Javas Random class.
+
+Two dice: Labelled as d1 and d2 are randomised giving the illusion of rolling using Javas Random class.
 The player that rolled, the output of the dice and total sum are presented clearly in a format where the player cant get condused.
 This behaviour is implemented in the rollDice() method in Game.java.
 
+Single Die: In Game.java, a single number randomiser needing no sum is used and presented in terminal in the same manner as the 2 dice version.
+The roll is labelled using an integer as "d" and uses random. to randomise its value.
+The "game" knows which dice is being used simply because of the variation call in Game.java
+int roll = (variation == Variation.SINGLE_DIE)
+? rollSingleDie("red/blue")
+: rollDice("red/blue"
+whats being asked here is if the game variation isnt double dice, to play using single dice.
+
 -Board: The board is represented by the board class
+
+-Player movement logic is calculated using "newPosition = oldPosition + totalRoll" and "newPosition = oldPosition - totalRoll"
+This is whats creating two opposite movement directions on the same linear board.
 
 - WormholeRule logic
 - HitRule logic

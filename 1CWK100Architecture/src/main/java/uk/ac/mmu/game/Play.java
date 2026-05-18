@@ -4,6 +4,7 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import uk.ac.mmu.game.applicationcode.domainmodel.Game;
 import uk.ac.mmu.game.applicationcode.usecase.play.Provided;
+import uk.ac.mmu.game.applicationcode.variations.Variation;
 
 @Component
 class Play implements org.springframework.boot.CommandLineRunner, Ordered {
@@ -16,8 +17,9 @@ class Play implements org.springframework.boot.CommandLineRunner, Ordered {
 
     @Override
     public void run(String... args)  {
-        Game game = new Game();
-        game.play();
+        new Game(Variation.BASIC).play();
+        new Game(Variation.SINGLE_DIE).play();
+        new Game(Variation.EXACT_END).play();
     }
 
     @Override
@@ -25,3 +27,4 @@ class Play implements org.springframework.boot.CommandLineRunner, Ordered {
         return Ordered.HIGHEST_PRECEDENCE;
     }
 }
+
