@@ -63,7 +63,12 @@ in simpler terms its saying red player uses + and blue player uses -.
 
 -Single Dice: Same size board, same rules applying as basic game just using 1 singular die instead of the sum of 2 dice.
 
-- Exact end:
+- Exact end: This variotion of the game includes the same goal as basic game but winning is a little tougher since, you
+have to land on the exact last panel for example red players will be 25 and blue players 1.
+If players are close to finishing and roll a numer higher than the required amount to reach their respective final panel
+the player is taken moved back spots by the remainder amount. Ive used an if statement "if(redPos > end)" and 
+"if(bluePos < end)" basically asking the question that if the red players position is to end up higher than the board
+ to take action and same for if blue player was to end up lower.
 
 
 
@@ -104,6 +109,11 @@ whats being asked here is if the game variation isnt double dice, to play using 
 
 -Player movement logic is calculated using "newPosition = oldPosition + totalRoll" and "newPosition = oldPosition - totalRoll"
 This is whats creating two opposite movement directions on the same linear board.
+
+-Hit Logic: Ive used an if statement "if(redPos > end)" and 
+"if(bluePos < end)" basically asking the question that if the red players position is to end up higher than the board
+ to take action and same for if blue player was to end up lower.
+
 
 - WormholeRule logic
 - HitRule logic

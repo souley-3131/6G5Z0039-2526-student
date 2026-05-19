@@ -3,5 +3,6 @@ package uk.ac.mmu.game.applicationcode.variations;
 public enum Variation {
     BASIC,
     SINGLE_DIE,
-    EXACT_END
+    EXACT_END,
+    HIT
 }

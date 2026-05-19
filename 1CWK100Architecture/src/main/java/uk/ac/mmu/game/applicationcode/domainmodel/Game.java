@@ -16,7 +16,6 @@ public class Game {
     private boolean redTurn = true;
 
     private int redTurns = 0;
-    private boolean blueTurn = true;
     private int blueTurns = 0;
 
     public Game(Variation variation) {
@@ -44,8 +43,16 @@ public class Game {
                         : rollDice("Red");
 
                 System.out.println("Red rolled " + roll);
+
+                int oldRed = redPos;
+
                 redPos += roll;
                 System.out.println("Red moved to " + redPos);
+
+                if (variation == Variation.HIT && redPos == bluePos) {
+                    System.out.println("Red HIT Blue! Red stays at " + (oldRed));
+                    redPos = oldRed;
+                }
 
                 if(variation == Variation.EXACT_END) {
                     int end = board.getRedEnd();
@@ -61,6 +68,7 @@ public class Game {
                         int totalTurns = redTurns + blueTurns;
                         System.out.println("Total turns taken by all players: " + totalTurns);
                     }
+
                 } else {
 
                     if (redPos >= board.getRedEnd()) {
@@ -81,8 +89,16 @@ public class Game {
                         : rollDice("Blue");
 
                 System.out.println("Blue rolled " + roll);
+
+                int oldBlue = bluePos;
+
                 bluePos -= roll;
                 System.out.println("Blue moved to " + bluePos);
+
+                if (variation == Variation.HIT && bluePos == redPos) {
+                    System.out.println("Blue HIT! Blue stays at " + (oldBlue));
+                    bluePos = oldBlue;
+                }
 
                 if (variation == Variation.EXACT_END) {
                     int end = board.getBlueEnd();

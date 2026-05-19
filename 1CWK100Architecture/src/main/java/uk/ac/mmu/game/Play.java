@@ -20,6 +20,7 @@ class Play implements org.springframework.boot.CommandLineRunner, Ordered {
         new Game(Variation.BASIC).play();
         new Game(Variation.SINGLE_DIE).play();
         new Game(Variation.EXACT_END).play();
+        new Game(Variation.HIT).play();
     }
 
     @Override
