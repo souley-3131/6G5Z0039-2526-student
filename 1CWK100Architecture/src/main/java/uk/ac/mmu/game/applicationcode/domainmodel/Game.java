@@ -27,6 +27,23 @@ public class Game {
         System.out.println("\n===================");
         System.out.println("Game Variation " + variation);
         System.out.println("====================");
+
+        int boardSize = board.getRedEnd();
+        int players = 2;
+        int diceUsed = (variation == Variation.SINGLE_DIE) ? 1: 2;
+
+        String rules = switch (variation) {
+            case EXACT_END ->  "Exact End Version";
+            case HIT ->  "Hit Version";
+            case TELEPORT ->  "Teleport Version";
+            default ->  "Basic game";
+        };
+        System.out.println("Board size: " + boardSize + " squares");
+        System.out.println("Players: " + players);
+        System.out.println("Dice used: " + diceUsed);
+        System.out.println();
+
+
         System.out.println("Starting Basic Game!");
         System.out.println("Red starts at " + redPos);
         System.out.println("Blue starts at " + bluePos);
@@ -47,7 +64,13 @@ public class Game {
                 int oldRed = redPos;
 
                 redPos += roll;
-                System.out.println("Red moved to " + redPos);
+                System.out.println("Red moved from " + oldRed + " to " + redPos);
+
+                if (variation == Variation.TELEPORT && board.isWormhole(redPos)) {
+                    int newPos = board.getWormhole(redPos);
+                    System.out.println("Red landed on wormhole, " + "Teleport Red from " + redPos + " to " + newPos);
+                    redPos = newPos;
+                }
 
                 if (variation == Variation.HIT && redPos == bluePos) {
                     System.out.println("Red HIT Blue! Red stays at " + (oldRed));
@@ -93,7 +116,13 @@ public class Game {
                 int oldBlue = bluePos;
 
                 bluePos -= roll;
-                System.out.println("Blue moved to " + bluePos);
+                System.out.println("Blue moved from " + oldBlue + " to " + bluePos);
+
+                if (variation== Variation.TELEPORT && board.isWormhole(bluePos)) {
+                    int newPos = board.getWormhole(bluePos);
+                    System.out.println("Blue landed on wormhole, " + "Teleport Blue from " + bluePos + " to " + newPos);
+                    bluePos = newPos;
+                }
 
                 if (variation == Variation.HIT && bluePos == redPos) {
                     System.out.println("Blue HIT! Blue stays at " + (oldBlue));

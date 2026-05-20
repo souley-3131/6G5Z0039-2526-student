@@ -4,5 +4,6 @@ public enum Variation {
     BASIC,
     SINGLE_DIE,
     EXACT_END,
-    HIT
+    HIT,
+    TELEPORT
 }

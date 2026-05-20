@@ -63,18 +63,22 @@ in simpler terms its saying red player uses + and blue player uses -.
 
 -Single Dice: Same size board, same rules applying as basic game just using 1 singular die instead of the sum of 2 dice.
 
-- Exact end: This variotion of the game includes the same goal as basic game but winning is a little tougher since, you
+- Exact end: This variation of the game includes the same goal as basic game but winning is a little tougher since, you
 have to land on the exact last panel for example red players will be 25 and blue players 1.
 If players are close to finishing and roll a numer higher than the required amount to reach their respective final panel
 the player is taken moved back spots by the remainder amount. Ive used an if statement "if(redPos > end)" and 
 "if(bluePos < end)" basically asking the question that if the red players position is to end up higher than the board
  to take action and same for if blue player was to end up lower.
 
+- Wormhole teleportation: This variation adds special squares on the board called wormholes. If a player lands on one of 
+these squares after moving they are instantly teleported to a linked square somewhere else on the board. The linked squares
+are different pairs implemented by me, explained in the implementation section.
 
+- Hit: This variation adds a rule where players may hit eachother byt landing on the exact same square although theyre 
+moving in opposite directions. And if a hit does occur the player whos roll caused the hit doesnt get to move and misses
+a go.
+For example if Blue moves from 20 to 16 but Red is already on 16, this is a "Hit" and Blue stays at 20.
 
--Wormholes
-- Hit rule
-- Overshoot rule
 - Replay system
 - Turn-based game loop
 
@@ -110,14 +114,25 @@ whats being asked here is if the game variation isnt double dice, to play using 
 -Player movement logic is calculated using "newPosition = oldPosition + totalRoll" and "newPosition = oldPosition - totalRoll"
 This is whats creating two opposite movement directions on the same linear board.
 
--Hit Logic: Ive used an if statement "if(redPos > end)" and 
-"if(bluePos < end)" basically asking the question that if the red players position is to end up higher than the board
- to take action and same for if blue player was to end up lower.
+-Hit Logic: A collision mechanic that if a player was to land on the same square as another player, the moving player
+ doesnt take the square. 
+ In Game.java ive stored the old positions of players with "int  oldRed = redPos;", "int oldBlue = bluePos;"
+ Basically if you land on a player your pushed back to your old position giving the illusion you missed a go.
 
+- Wormhole Teleportation logic: My implementation of each teleporting wormhole was linked in Board.java since its a chance of the board.
+"Map<Integer, Integer>" is what connects the 2 spaces together and allows me to pair 2 spaces together, as in making them
+wormholes. 
+In Game.java, after each player move the check of "if (board.isWormhole(redPos)) {redPos = board.getWormhole(redPos); } 
+goes ahead basically meaning if a wormhole has been landed on to send the player to the wormholes paired/linked wormhole.
 
-- WormholeRule logic
-- HitRule logic
-- EndRule logic
+- Exact End logic
+If a player rolls a number that would take them past the end, they "bounce back" by the overshoot amount. 
+To implement this, Ive used an if statement "if(redPos > end)" and "if(bluePos < end)" basically asking the question that
+ if the red players position is to end up higher than the board to take action and same for if blue player was to end up lower.
+ I calculated the players new position then check if theyve gone past their end :
+  "if (redPos > end) { int overshoot = redPos - end; redPos = end - overshoot; }
+And for blue: "if (bluePos < end) {int overshoot = end - bluePos; bluePos = end + overshoot; }
+
 - RuleEngine logic
 - Game turn loop
 
